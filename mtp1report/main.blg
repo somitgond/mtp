@@ -1,0 +1,17 @@
+[0] Config.pm:308> INFO - This is Biber 2.20
+[0] Config.pm:311> INFO - Logfile is 'main.blg'
+[122] biber:340> INFO - === Tue Nov 19, 2024, 18:26:11
+[142] Biber.pm:420> INFO - Reading 'main.bcf'
+[226] Biber.pm:994> INFO - Found 8 citekeys in bib section 0
+[248] Biber.pm:4463> INFO - Processing section 0
+[262] Biber.pm:4654> INFO - Looking for bibtex file 'refs.bib' for section 0
+[263] bibtex.pm:1713> INFO - LaTeX decoding ...
+[283] bibtex.pm:1519> INFO - Found BibTeX data source 'refs.bib'
+[405] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[406] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[406] Biber.pm:4283> INFO - Sorting list 'nty/global//global/global/global' of type 'entry' with template 'nty' and locale 'en-US'
+[406] Biber.pm:4289> INFO - No sort tailoring available for locale 'en-US'
+[421] bbl.pm:676> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[427] bbl.pm:779> INFO - Output to main.bbl
+[427] Biber.pm:131> WARN - Duplicate entry key: 'rfc6582' in file 'refs.bib', skipping ...
+[427] Biber.pm:133> INFO - WARNINGS: 1

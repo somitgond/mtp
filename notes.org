@@ -1,0 +1,197 @@
+* MTP Notes
+Some Questions:
+1. Can you describe what we will be doing in detail?
+2. What should we expect from the project or what is project's goal or completion goal ?
+3. How will we be graded?
+4. What are the different Literatures we should read?
+5. What are the different applications we will be using? Preferred platform linux, BSD, windows ?
+6. If we will be using Machine Learning:  
+    a. What should we expect from ML models?   
+    b. What type of ML models to use?  
+
+
+Notes:  
+topology in ns-3  
+literature review:   
+transport layer application.  
+TCP  
+ 
+27-sep: ns-3 and generate data from basic topology,   
+October: repeating above steps for new protocol (1).  
+November: new thing, beside ns-3  
+December: Data ready, ML model to estimate Q-thresold  
+Jan: get result from the ML model   
+Feb, March: Use results from ML model to generate new data and  show difference from (1)   
+April:  
+P: Thursday and Friday : After 2 PM  
+S: Tuesday through Friday: After 2 PM  
+
+Task: Literature Review and Topology generation, reading manual on ns-3  
+Friday on 4: weekly meeting.  
+
+* Congestion Control Reading Material Notes  
+
+CC: Congestion Control;  
+
+## When Machine Learning Meets Congestion Control: A Survery and Comparison  
+
+### Traditional CC   
+
+1. end-to-end CC: Sender and receiver collaborate, Based on Implicit signals such as Trasmission delay, packet loss   
+    a. loss-based: Adjust sending rate when sender has not recieved corresponding ACK over a given time. Attain high throughput by making use link bandwith e.g. HighSpeed, Hybla, Binary Increase Congestion Control (Bic)  
+        i. Disadvantage: Random packet dropping can trigger CC action  
+    b. delay-based: Detect delay in network transmission, more suitable for high speed and flexible use. Problem is to how to calculate delay, delay is based on the network stack used. E.g. Timely  
+    c. hybrid: Use a and b. E.g. Veno, adaptive and fair rapid increase rule for scalable transmission control protocol (Africa TCP)  
+
+2. Network Assisted CC: Require information from network devices e.g. routers, Based on Explicit Signals. Explicit Congestion Notification (ECN) is sent to hosts, for them to manager transmission rates. Multi-level ECN for further performance increase.  
+
+Cons: One CC algo to rule them all. Not specific for each network layout. Many edge cases may exist to make these algorithms useless.  
+
+### Learning Based CC  
+Make real time decisions instead of following predefined rules.   
+a. Supervised  
+b. Unsupervised  
+c. Reinforcement Learning  
+
+a and b are not realtime applications, because they are trained offline and used to estimate network status such as congestion signal and queue length.  
+RL is more towards realtime learning for CC.  
+Much research is focused on RL techniques.  
+
+Realtime Learning based CC is still a problem.   
+    - Learning in real time adds a time overhead.   
+    - Learning is mostly to control congestion window (CWND) length,   
+    - Still mostly applied in end-to-end CC   
+Solution:  
+    - Design Lightweight Model of mapping tables of states and actions to decrease time overhead  
+    - Decrease the frequency of decisions   
+    - Asynchronous RL  
+
+### Background  
+
+#### Congestion Control Mechanism  
+
+Four Mechanism:  
+1. Slow start: Exponential growth in CWND at start  
+2. Congestion Avoidance: Linear growth in CWND after a thresold is reached in slow start  
+3. Retransmission: Retransmits in case of packet loss  
+4. Fast Recovery: When the sender recieves three duplicate ACKs in succession, sender halves the slow start thresold to avoid congestion. Important thing is when does sender can recieve 3 Duplicate ACKs? Only when sender sends same three packets knowing packet loss. but the packets are delievered successfully, => Network is heavily congested.  
+
+#### Classic Congestion Control Algorithms
+
+##### End-to-End CC Algo
+
+1. Loss Based CC Alog:  
+    - Generic: Tahoe -> Reno -> NewReno -> Selective ACK (SACK)  
+    - High speed networks: Bic -> Cubic; Highspeed and Hybla  
+    - Improve throughput in wireless networks: WestWood  
+2. Delay Based: Optimize RTT, one-way delay, queue delay  
+    - Vegas -> LoLa  
+            -> FAST (Fast active queue management scalable TCP)  
+    - Timely: Uses hardware time instead of software time stamping  
+    - Low Extra Delay Background Transport (LEDBAT) one-way delay instead of RTT, advantage is that no need to consider loop delay of returning ACK, very friendly to cubic flow  
+    - Copa uses one-way delay also.  
+
+3. Hybrid CC Algo:  
+    - Veno: Vegas + Reno  
+    - Africa: Based on Reno  
+    - Compound: Based on Reno + some features of Vegas  
+    - Libra: Optimized Compound for fairness among TCP flows regardless of RTT  
+    - Google CC: in WebRTC which uses UDP based RTP   
+    - Remy  
+    - BBR  
+    - Stand-in Control Protocol (SCP)  
+    - Performance-oriented CC (PCC)  
+    - PCC Vivace  
+    - PCC Proteus  
+
+##### Network-assisted CC Algo  
+- ECN based Algorithms  
+- Quantized Congestion Notification-base (QCN-based) Algorithms  
+
+##### Performance Metric for CC
+- Maximizing Throughput
+- Minimize RTT or flow completion time
+- Minimize Packet Loss rate
+- Fairness
+- Responsiveness
+
+### Supervise Learning Based CC
+- Decision Trees, Nural Network, Random Forest, Bayes, Regression
+
+## Questions:   
+- Why not all the algorithms are in RFC?  
+- Each CC algorithm is designed to achieve a particular goal for example, reduced RTT, increase fairness, increase responsiveness, decrease packet loss rate. Why can't we achieve all the goals in one single CC algorithm?  
+- Can the CC algorithms be privately desgined as in for a particular Data Centre use?   
+- Which version of ns3 is preferred ?   
+
+* Meetings
+** Aug, 16 Meeting Notes
+
+   preferred version: ns 3.36
+   Congestion Control: Kurose and ross
+   Q-thresold ?
+ 1. can i look at traces in router and infer Q-thresold and parameters?
+ 2. For heterogenous topology, adapting the parameters : ML required?
+
+ Model will be in the router, memory footprint and size are constraint 
+ AIMD and CC, MIMD protocols: Kuross and Ross Textbook
+ ML I/P : Packets Traces=> IP address, Network rates, 
+ How to generate Lables?: using the packet traces itself we can generate  
+ Labels: Window size
+ For each end-users sliding window size, and how it impacts the router, can we do this using single AIMD algo.
+ Window Size Vs time.
+ n = no. of users , data will be in order of n.
+ label will be number: window size, 
+
+ Next meeting: when to drop packets, what will come out of ns3 and how to process it. what output we want to calculate q-thresold. 
+ AQM?
+ Core: routers and all
+ Now: Making core simplers and making end point smarter.
+ Earlier: Making core smarter and making end point simplers.
+ We are doing : Making core simple and making end point simplers. But ML system lies in the core. 
+
+ TODO: Mathematical equation about CC.
+ Equations of AIMD.
+ How TCP works in Congestion avoidance phase? Mathematical equations? 
+ examples-to-run.py read those
+ tcp-bulk-send.cc read this for bulk transfer
+ Mathematical equations
+
+** HomeWork After Week 2 17 August
+   Ran second.cc file, Note: max number of nCsma= 253
+   A simulation is a simulation, it can waver of from reality quite quickly if not noticed.
+   "It is up to you to understand what you are asking the system to do and to make sure that the simulations you create have some meaning and some connection with a reality defined by you"
+   third.cc is a wireless topology.
+
+** Aug 22 meet
+   single bottleneck dumbbell : toplology
+   AIMD
+   loss+delay based congestion parameter: Compound TCP
+   loss: reno, tahoe
+   delay: vegas, FAST
+   Droptail : when memory gets full packets get dropped.
+   qth: queue thresold in router
+   TCP+AQM : congestion control
+   AQM design : our method
+   TASK: N = 60, Bc= 100mbps, Ba = 2mbps,  packet size, MSS: 1460 bytes, runtime 300s.
+   write toplogy and python3 wrapper to control it
+
+** 17/2/2025 meeting
+	 - implement global sync metric in ns3 simulation, set thresold as 0.5
+         - DONE make a video of heatmap for pairwise sync metric
+         - DONE pairwise matrices on drive: not in congestion (in the starting) and in congestion
+** 24/2/2025 meeting
+*** task
+	- sync rate analysis
+	- global sync in ns3
+	- Mid sem presentation draft
+*** notes
+	- pairwise loss sync rate heatmap is oscillating too much: because I have taken step size 2 (tau*2 == RTT)
+	- 
+	- latency and throughput: network performance metric
+	- at every reading of cwnd change the dequeue old cwnd value and enqueue new cwnd value.
+    - at every cwnd tracing: calculate global sync rate and if it is greater than 0.5 make new qth
+	- cosidering loss events only
+** 3/3/2025 meeting
+   - block diagram of implementation in slides
+* 

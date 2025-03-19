@@ -1,0 +1,114 @@
+\begin{center}
+{\huge\textbf{\ttitle}}\\
+\end{center}
+\section{Introduction and background}
+Today's world runs on internet. The demand for internet is increasing every second but infrastructure supporing internet is not scaling as fast. \\
+Congestion happens at a router when the rate of incoming packets is greater than the bandwidth of outgoing link. Routers have a finite buffer so that they can store the packets that can't be sent immediately, it sends them when bandwidth is empty or not full, thus ensuring full utilization of bandwidth. But what if the buffer is full at the router, it starts to drop packets. TCP uses this implicit signal of dropping packets as sign of congestion. \\ 
+The router can drop packets when its buffer gets full but it creates a situation of bufferbloat i.e its buffer is never empty. To ensure that this situation doesn't occur Random Early Detection (RED) was developed. In RED, router starts to drop packets with some probability, the probability depends on the moving average of queue size. \\
+Some of Active Queue Management (AQM) algorithms used in today's routers :
+\begin{enumerate}
+    \item Threshold Based Queueing: If queue size is beyond a threshold, the router starts to drop packets. % more details
+    \item Random Early Detection: Router starts to drop packets with probability dependent on queue size i.e when queue is empty the probability is 0 and when queue is full the probablity is 1 and in between it calculates the probability and drops packets.  % fill the examples
+\end{enumerate}
+Our goal in this project is to how to calculate parameters for threshold based queuing mechanism.
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Literature survey}
+Transmission Control Protocol (TCP) is a reliable, in-order, byte-stream transport layer protocol \cite{rfc9293}. TCP reliability constitutes of error correction mechanism, detecting packet loss and correction via retransmission \cite{rfc9293}. \\
+TCP uses various congestion control mechanisms \cite{rfc5681} :
+\begin{itemize}
+    \item Slow Start: At start of a connection, trasmission rate (Congestion window (cwnd) size) is increased exponentially until a threshold called slow start threshold (ssthresh) is reached or congestion is detected.
+    \item Congestion Avoidance: After threshold is reached, TCP increases congestion window linearly
+until bandwith limit is reached.
+    \item Fast Retransmit and Fast Recovery: When packet loss is detected TCP retransmits the package
+and enter fast recovery to recover from the loss.
+\end{itemize}
+Some notable improvements include:
+\begin{itemize}
+    \item Reno \cite{rfc5681}: Improving fast Retransmit and fast recovery aspect of TCP.
+    \item NewReno \cite{rfc6582}: Improvement over Reno, improves retransmission during fast-recovery phase of Reno. \
+    \item Cubic \cite{rfc9438}: Uses cubic function instead of linear function for congestion window increase. It is designed for high speed and long distance network.
+\end{itemize}
+Routers has some finite buffer in which it stores the packets that it can't send immediately. Generally routers drop incoming packets when its buffer is full. But using, Active Queue Management (AQM) techniques it tries to manage buffer, dropping packets before buffer gets full or using a some criteria for dropping packets\cite{bachl22}. Random Early Detection (RED) is one such AQM where, when the average queue size exceeds a preset threshold the router drops incoming packet with a certain probability, where exact probability is a function of the average queue size \cite{floyd93}. Various changes have been suggested to RED such as Exponential RED \cite{shao05}, PIE \cite{pan13} etc. While in Threshold based queueing policy router drops incoming packet when queue size exceeds a certain threshold.
+
+\clearpage
+\section{Problem definition and Objective}
+In congestion avoidance phase of tcp it follows additive increase and multiplicative decrease to change cwnd size. \\
+Additive increase: \( w_{t+1} = w_{t} + \alpha w_{t}^{k-1} \)\\
+Multiplicative decrease: \( w_{t+1} = (1-\beta)w_{t}  \)\\
+where \( \alpha > 0, \beta < 1 \)\\
+The value of \( q_{th} \) can be calculated as: \\ 
+\[
+    \beta w^* \left(\frac{w^*}{C \tau}\right)^{q_{th}}{q_{th}} = \pi/2
+\]
+where $ q_{th} $ is queueing threshold, \textit{C} is link bandwidth, $ \tau $ is average round trip time, $ \beta $ is AIMD parameter (generally 0.5) and $ w^* $ is average window length.\\
+Now, how to calculate the parameter \( q_{th} \) effectively.  \\
+To calculate of $ q_{th} $ we require values of $ \beta $ and $ w^* $. \\
+So, the objective of our project is to: 
+\begin{enumerate}
+    \item Simulate sample topologies in ns-3 and Generate Data 
+    \item Calculate \( \beta \) value and $ w^* $ from generated data, then calculating \( q_{th} \) 
+    \item Implement this whole process of calculating $ q_{th} $ then setting it as threshold, in ns-3 
+\end{enumerate}
+
+\clearpage
+
+\section{Methodology}
+The methodology we took to achieve the desired objective:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\textwidth]{topology.png}
+    \caption{\label{fig:myfig2} Topology used for Simulation}
+\end{figure}
+\begin{enumerate}
+    \item Literature Review: We have done extensive literature review on our topic. By doing this we found at what level current state of the art is. We also learnt about different approaches explored to counter network congestion.
+    \item ns-3: ns-3 is a network simulator program. It is open-source so anybody can contribute in it. It is used to simulate different network scienarios. It uses C++ Programming languague at is base. The topology can be build using C++ code. It is a network simulator so all the pieces required for simulating a network scienario exist in it. We learnt how to use ns-3 to simulate example topologies.
+    \item Topology Generation: \ref{fig:myfig2} The parameters given in the image satisifes the congestion scenario i.e incoming traffic should be greater than outgoing link's bandwidth. Using C++ code we simulated this topology in ns-3.
+    \item Learning About Congestion Control: We learnt about different TCP flavours like TCP tahoe, Reno, NewReno, Cubic etc. and how they handle congestion, their disadvantages and disadvantages, use cases etc. We also learnt about how routers handle congestion different packet dropping policies and how they impact current internet.
+    \item Generating Data: By simulating given network topology we generated that can be used for further analysis.
+    \item Understaing data: At this phase, we basically analysed the generated data what different inferences we can generate from it.
+    \item Finding Optimal Parameters: We propose using data driven approach to calculate \( \beta, \alpha \) and k values, and from that we can calculate value of \( q_{th} \). 
+    \item Updating the metric: In this phase we will be implementing our approach in ns-3. Comparing our results with with general congestion scenario and check if our approach fairs better or worse.
+\end{enumerate}
+
+\clearpage
+\section{Theoretical/Numerical/Experimental findings}
+The result is generated using simulation for the given topology (\ref{fig:myfig2}). Trace file at router 1 was collected as well as change of cwnd size with time for each client node was also collected. 
+
+Some of the result is discussed below:\\
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\textwidth]{aimd.png}
+    \caption{\label{fig:myfig3} Congestion window (\textit{w}) vs time for one node}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\textwidth]{allNodesCwnd.png}
+    \caption{\label{fig:myfig4} Congestion Window (\textit{w}) vs time for all nodes}
+\end{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\textwidth]{avgCwnd.png}
+    \caption{\label{fig:myfig5} Average Congestion Window (\textit{w*}) vs time }
+\end{figure}
+1. This graph (\ref{fig:myfig3}) shows how cwnd size varies with time for a single node. You can see in this graph how additive increase and multiplicative decrease (AIMD) works in congestion avoidance phase of TCP. Size of cwnd either increases linearly or decreases multiplicatively with each RTT in congestion avoidance phase.\\ % graph 
+2. This graph (\ref{fig:myfig4}) shows cwnd size vs time for all 60 nodes. This graph shows how global syncronization leads to bandwidth underutilization. Global synchronization means either all nodes send traffic simulatneously or back off simultaneously. \\ % graph
+3. This graph (\ref{fig:myfig5}) show average cwnd ($ w^* $) vs time. $ w^* $ is average of $ w $ for all nodes with time. \\ %graph
+
+\clearpage
+\section{Summary and Future plan of work}
+In our project we aim to propose a solution to widely encoutered situation in today's internet connected world, Network Congestion. Congestion wastes important resources time, computing power etc. If not handled properly it can lead to collapse of whole internet infrastructure. It occurs in routers, when incoming traffic is greater then bandwidth of outgoing link. Routers have finite buffer that they use to contnuously send data thus utilizing full bandwidth. Most of recent work is focused on making end points more intelligent and handling congestion mainly through them. Active Queue Management (AQM) serves as a way for router to control congestion as well as notify end points that a congestion has occured or it is likely to occur if they don't lower their sending rates. Random Eearly Detection randomly starts to drop packets as queue get full. While Thresold based queueing policy starts to drop packets when queue size crosses a certain threshold. In our project we aim to modify threshold based queueing policy such that it ensures stability as well as greater throughput thus more utilization of bandwidth. We will be using data driven approach to learn queue threshold parameter.\\
+Future work includes refining our approach more as well as fixing inconsistencies in the data generated. Using different approaches to calculate \( \alpha, \beta \) and k parameter. Implementing this new AQM policy in ns-3 and comparing its result with current widely used methods.\\
+
+%This is how you cite a paper: Golve~\cite{glove:2014}.
+
+\clearpage
+
+%\section*{Publications  (if any)}
+%\addcontentsline{toc}{section}{Publications  (if any)}
+%\myemptypage
+
+%\section*{Appendix (if any)}
+%\addcontentsline{toc}{section}{Appendix (if any)}
