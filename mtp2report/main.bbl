@@ -1,0 +1,400 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{bachl22}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=2d5e5ac54dad4e0d52636f0128acb378}{%
+           family={Bachl},
+           familyi={B\bibinitperiod},
+           given={Maximilian},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{fullhash}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{fullhashraw}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{bibnamehash}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{authorbibnamehash}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{authornamehash}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{authorfullhash}{2d5e5ac54dad4e0d52636f0128acb378}
+      \strng{authorfullhashraw}{2d5e5ac54dad4e0d52636f0128acb378}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{06}
+      \field{title}{Fair Queuing Aware Congestion Control}
+      \field{year}{2022}
+      \verb{doi}
+      \verb 10.48550/arXiv.2206.10561
+      \endverb
+    \endentry
+    \entry{rfc5681}{misc}{}{}
+      \name{author}{3}{}{%
+        {{hash=f636a8343e73bcb3af62b65bc530137c}{%
+           family={Blanton},
+           familyi={B\bibinitperiod},
+           given={Ethan},
+           giveni={E\bibinitperiod}}}%
+        {{hash=4805ad873ffa7e0f40f5950921042b68}{%
+           family={Paxson},
+           familyi={P\bibinitperiod},
+           given={Dr.\bibnamedelimi Vern},
+           giveni={D\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=16106a5714a6a080fe22adcde1f7a047}{%
+           family={Allman},
+           familyi={A\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {RFC Editor}%
+      }
+      \strng{namehash}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{fullhash}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{fullhashraw}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{bibnamehash}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{authorbibnamehash}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{authornamehash}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{authorfullhash}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \strng{authorfullhashraw}{936fab18c37a2bee4b0e9eb192e2d4af}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This document defines TCP's four intertwined congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. In addition, the document specifies how TCP should begin transmission after a relatively long idle period, as well as discussing various acknowledgment generation methods. This document obsoletes RFC 2581. {[}STANDARDS-TRACK{]}}
+      \field{howpublished}{RFC 5681}
+      \field{month}{9}
+      \field{number}{5681}
+      \field{pagetotal}{18}
+      \field{series}{Request for Comments}
+      \field{title}{{TCP Congestion Control}}
+      \field{year}{2009}
+      \verb{doi}
+      \verb 10.17487/RFC5681
+      \endverb
+      \verb{urlraw}
+      \verb https://www.rfc-editor.org/info/rfc5681
+      \endverb
+      \verb{url}
+      \verb https://www.rfc-editor.org/info/rfc5681
+      \endverb
+    \endentry
+    \entry{rfc9293}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=eff1d6e4dc522328e3ceeed671666aad}{%
+           family={Eddy},
+           familyi={E\bibinitperiod},
+           given={Wesley},
+           giveni={W\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {RFC Editor}%
+      }
+      \strng{namehash}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{fullhash}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{fullhashraw}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{bibnamehash}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{authorbibnamehash}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{authornamehash}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{authorfullhash}{eff1d6e4dc522328e3ceeed671666aad}
+      \strng{authorfullhashraw}{eff1d6e4dc522328e3ceeed671666aad}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This document specifies the Transmission Control Protocol (TCP). TCP is an important transport-layer protocol in the Internet protocol stack, and it has continuously evolved over decades of use and growth of the Internet. Over this time, a number of changes have been made to TCP as it was specified in RFC 793, though these have only been documented in a piecemeal fashion. This document collects and brings those changes together with the protocol specification from RFC 793. This document obsoletes RFC 793, as well as RFCs 879, 2873, 6093, 6429, 6528, and 6691 that updated parts of RFC 793. It updates RFCs 1011 and 1122, and it should be considered as a replacement for the portions of those documents dealing with TCP requirements. It also updates RFC 5961 by adding a small clarification in reset handling while in the SYN-RECEIVED state. The TCP header control bits from RFC 793 have also been updated based on RFC 3168.}
+      \field{howpublished}{RFC 9293}
+      \field{month}{8}
+      \field{number}{9293}
+      \field{pagetotal}{98}
+      \field{series}{Request for Comments}
+      \field{title}{{Transmission Control Protocol (TCP)}}
+      \field{year}{2022}
+      \verb{doi}
+      \verb 10.17487/RFC9293
+      \endverb
+      \verb{urlraw}
+      \verb https://www.rfc-editor.org/info/rfc9293
+      \endverb
+      \verb{url}
+      \verb https://www.rfc-editor.org/info/rfc9293
+      \endverb
+    \endentry
+    \entry{floyd93}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=7601832cf3b530105ae9618be944c189}{%
+           family={Floyd},
+           familyi={F\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=a25d21ec614ebedb82800ec385049ac1}{%
+           family={Jacobson},
+           familyi={J\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{fullhash}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{fullhashraw}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{bibnamehash}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{authorbibnamehash}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{authornamehash}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{authorfullhash}{080f7e064da96d54c9f5e65d182ce2d9}
+      \strng{authorfullhashraw}{080f7e064da96d54c9f5e65d182ce2d9}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE/ACM Transactions on Networking}
+      \field{number}{4}
+      \field{title}{Random early detection gateways for congestion avoidance}
+      \field{volume}{1}
+      \field{year}{1993}
+      \field{pages}{397\bibrangedash 413}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1109/90.251892
+      \endverb
+      \keyw{Transport protocols;Delay effects;Throughput;Propagation delay;Bandwidth;TCPIP;Traffic control;High-speed networks;Feedback;Delay estimation}
+    \endentry
+    \entry{rfc6582}{misc}{}{}
+      \name{author}{4}{}{%
+        {{hash=f2efae89a910397f98c3d9cd16dac79f}{%
+           family={Gurtov},
+           familyi={G\bibinitperiod},
+           given={Andrei},
+           giveni={A\bibinitperiod}}}%
+        {{hash=31b9ad6dc0e4ea2925c29391c480c462}{%
+           family={Henderson},
+           familyi={H\bibinitperiod},
+           given={Tom},
+           giveni={T\bibinitperiod}}}%
+        {{hash=bcb66fc187ba17e78c6c22747197aecf}{%
+           family={Floyd},
+           familyi={F\bibinitperiod},
+           given={Sally},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5d46fd039b7939ad817ee109fbd09a60}{%
+           family={Nishida},
+           familyi={N\bibinitperiod},
+           given={Yoshifumi},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {RFC Editor}%
+      }
+      \strng{namehash}{bf45a9aeb4f24c6d10d476e83df502c3}
+      \strng{fullhash}{6f381437a22bbf2f4817f589f7eae599}
+      \strng{fullhashraw}{6f381437a22bbf2f4817f589f7eae599}
+      \strng{bibnamehash}{bf45a9aeb4f24c6d10d476e83df502c3}
+      \strng{authorbibnamehash}{bf45a9aeb4f24c6d10d476e83df502c3}
+      \strng{authornamehash}{bf45a9aeb4f24c6d10d476e83df502c3}
+      \strng{authorfullhash}{6f381437a22bbf2f4817f589f7eae599}
+      \strng{authorfullhashraw}{6f381437a22bbf2f4817f589f7eae599}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{RFC 5681 documents the following four intertwined TCP congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. RFC 5681 explicitly allows certain modifications of these algorithms, including modifications that use the TCP Selective Acknowledgment (SACK) option (RFC 2883), and modifications that respond to "partial acknowledgments" (ACKs that cover new data, but not all the data outstanding when loss was detected) in the absence of SACK. This document describes a specific algorithm for responding to partial acknowledgments, referred to as "NewReno". This response to partial acknowledgments was first proposed by Janey Hoe. This document obsoletes RFC 3782. {[}STANDARDS-TRACK{]}}
+      \field{howpublished}{RFC 6582}
+      \field{month}{4}
+      \field{number}{6582}
+      \field{pagetotal}{16}
+      \field{series}{Request for Comments}
+      \field{title}{{The NewReno Modification to TCP's Fast Recovery Algorithm}}
+      \field{year}{2012}
+      \verb{doi}
+      \verb 10.17487/RFC6582
+      \endverb
+      \verb{urlraw}
+      \verb https://www.rfc-editor.org/info/rfc6582
+      \endverb
+      \verb{url}
+      \verb https://www.rfc-editor.org/info/rfc6582
+      \endverb
+    \endentry
+    \entry{shao05}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=64b601dc5231b3b40be4df276efafe19}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Shao},
+           giveni={S\bibinitperiod}}}%
+        {{hash=527b2d7a6b9b8c80058ea72d697e68fc}{%
+           family={Basar},
+           familyi={B\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod}}}%
+        {{hash=fd8b02dd5056c4511c88f9d06b5a2889}{%
+           family={Srikant},
+           familyi={S\bibinitperiod},
+           given={R.},
+           giveni={R\bibinitperiod}}}%
+      }
+      \strng{namehash}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{fullhash}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{fullhashraw}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{bibnamehash}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{authorbibnamehash}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{authornamehash}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{authorfullhash}{48808b4cd5635104f0aa0904da4d60ee}
+      \strng{authorfullhashraw}{48808b4cd5635104f0aa0904da4d60ee}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE/ACM Transactions on Networking}
+      \field{number}{5}
+      \field{title}{Exponential-RED: a stabilizing AQM scheme for low- and high-speed TCP protocols}
+      \field{volume}{13}
+      \field{year}{2005}
+      \field{pages}{1068\bibrangedash 1081}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/TNET.2005.857110
+      \endverb
+      \keyw{Protocols;Feedback;Heuristic algorithms;Algorithm design and analysis;Network topology;Aggregates;Sufficient conditions;Stability;IP networks;High-speed networks;Congestion control;dual algorithm;primal algorithm;primal-dual algorithm;RED;TCP}
+    \endentry
+    \entry{pan13}{inproceedings}{}{}
+      \name{author}{7}{}{%
+        {{hash=3acacc1f684ef378918a00ece495d31b}{%
+           family={Pan},
+           familyi={P\bibinitperiod},
+           given={Rong},
+           giveni={R\bibinitperiod}}}%
+        {{hash=069ec9757f8a8b23c96dccff820e26ef}{%
+           family={Natarajan},
+           familyi={N\bibinitperiod},
+           given={Preethi},
+           giveni={P\bibinitperiod}}}%
+        {{hash=dc056953641297baf8f9e8ab82f308b6}{%
+           family={Piglione},
+           familyi={P\bibinitperiod},
+           given={Chiara},
+           giveni={C\bibinitperiod}}}%
+        {{hash=953a05459b96d6dfb36bb2cd0e0ff170}{%
+           family={Prabhu},
+           familyi={P\bibinitperiod},
+           given={Mythili\bibnamedelima Suryanarayana},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+        {{hash=a26c40e2000ae2d614798c453c537616}{%
+           family={Subramanian},
+           familyi={S\bibinitperiod},
+           given={Vijay},
+           giveni={V\bibinitperiod}}}%
+        {{hash=32a4a515e9d7cbe60949af6644b3b299}{%
+           family={Baker},
+           familyi={B\bibinitperiod},
+           given={Fred},
+           giveni={F\bibinitperiod}}}%
+        {{hash=dcee4c7a4edded74a64cc0f62429752d}{%
+           family={VerSteeg},
+           familyi={V\bibinitperiod},
+           given={Bill},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{c0b9704cba8535f7f0f6516d28b31fa6}
+      \strng{fullhash}{441453c08bbdf99eef3871513f1b5dee}
+      \strng{fullhashraw}{441453c08bbdf99eef3871513f1b5dee}
+      \strng{bibnamehash}{c0b9704cba8535f7f0f6516d28b31fa6}
+      \strng{authorbibnamehash}{c0b9704cba8535f7f0f6516d28b31fa6}
+      \strng{authornamehash}{c0b9704cba8535f7f0f6516d28b31fa6}
+      \strng{authorfullhash}{441453c08bbdf99eef3871513f1b5dee}
+      \strng{authorfullhashraw}{441453c08bbdf99eef3871513f1b5dee}
+      \field{sortinit}{P}
+      \field{sortinithash}{ff3bcf24f47321b42cb156c2cc8a8422}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2013 IEEE 14th International Conference on High Performance Switching and Routing (HPSR)}
+      \field{title}{PIE: A lightweight control scheme to address the bufferbloat problem}
+      \field{year}{2013}
+      \field{pages}{148\bibrangedash 155}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1109/HPSR.2013.6602305
+      \endverb
+      \keyw{Delays;Probability;Estimation;Internet;Throughput;Jitter;Linux;bufferbloat;Active Queue Management (AQM);Quality of Service (QoS);Explicit Congestion Notification (ECN)}
+    \endentry
+    \entry{rfc9438}{misc}{}{}
+      \name{author}{5}{}{%
+        {{hash=fad32cccb1bee56c02ce5156c010ddd4}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Lisong},
+           giveni={L\bibinitperiod}}}%
+        {{hash=0679c4327ff18f6a4b434542e7d6b889}{%
+           family={Ha},
+           familyi={H\bibinitperiod},
+           given={Sangtae},
+           giveni={S\bibinitperiod}}}%
+        {{hash=c2efba424e6284520d54279efcc92414}{%
+           family={Rhee},
+           familyi={R\bibinitperiod},
+           given={Injong},
+           giveni={I\bibinitperiod}}}%
+        {{hash=7726fd2dc32730c6b83601ff2cdc63a1}{%
+           family={Goel},
+           familyi={G\bibinitperiod},
+           given={Vidhi},
+           giveni={V\bibinitperiod}}}%
+        {{hash=2419ffad48436bd9ba957e4ba01053e2}{%
+           family={Eggert},
+           familyi={E\bibinitperiod},
+           given={Lars},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {RFC Editor}%
+      }
+      \strng{namehash}{d2d3cf1272bbd26967cf715bd80db949}
+      \strng{fullhash}{e8bc21c0cfe4efda0004d450fdb43836}
+      \strng{fullhashraw}{e8bc21c0cfe4efda0004d450fdb43836}
+      \strng{bibnamehash}{d2d3cf1272bbd26967cf715bd80db949}
+      \strng{authorbibnamehash}{d2d3cf1272bbd26967cf715bd80db949}
+      \strng{authornamehash}{d2d3cf1272bbd26967cf715bd80db949}
+      \strng{authorfullhash}{e8bc21c0cfe4efda0004d450fdb43836}
+      \strng{authorfullhashraw}{e8bc21c0cfe4efda0004d450fdb43836}
+      \field{sortinit}{X}
+      \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{CUBIC is a standard TCP congestion control algorithm that uses a cubic function instead of a linear congestion window increase function to improve scalability and stability over fast and long-distance networks. CUBIC has been adopted as the default TCP congestion control algorithm by the Linux, Windows, and Apple stacks. This document updates the specification of CUBIC to include algorithmic improvements based on these implementations and recent academic work. Based on the extensive deployment experience with CUBIC, this document also moves the specification to the Standards Track and obsoletes RFC 8312. This document also updates RFC 5681, to allow for CUBIC's occasionally more aggressive sending behavior.}
+      \field{howpublished}{RFC 9438}
+      \field{month}{8}
+      \field{number}{9438}
+      \field{pagetotal}{28}
+      \field{series}{Request for Comments}
+      \field{title}{{CUBIC for Fast and Long-Distance Networks}}
+      \field{year}{2023}
+      \verb{doi}
+      \verb 10.17487/RFC9438
+      \endverb
+      \verb{urlraw}
+      \verb https://www.rfc-editor.org/info/rfc9438
+      \endverb
+      \verb{url}
+      \verb https://www.rfc-editor.org/info/rfc9438
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
