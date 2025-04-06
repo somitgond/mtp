@@ -18,7 +18,6 @@
     pagetotal = 98,
     year =      2022,
     month =     aug,
-    abstract =  {This document specifies the Transmission Control Protocol (TCP). TCP is an important transport-layer protocol in the Internet protocol stack, and it has continuously evolved over decades of use and growth of the Internet. Over this time, a number of changes have been made to TCP as it was specified in RFC 793, though these have only been documented in a piecemeal fashion. This document collects and brings those changes together with the protocol specification from RFC 793. This document obsoletes RFC 793, as well as RFCs 879, 2873, 6093, 6429, 6528, and 6691 that updated parts of RFC 793. It updates RFCs 1011 and 1122, and it should be considered as a replacement for the portions of those documents dealing with TCP requirements. It also updates RFC 5961 by adding a small clarification in reset handling while in the SYN-RECEIVED state. The TCP header control bits from RFC 793 have also been updated based on RFC 3168.},
 }
 @misc{rfc5681,
     series =    {Request for Comments},
@@ -32,7 +31,6 @@
     pagetotal = 18,
     year =      2009,
     month =     sep,
-    abstract =  {This document defines TCP's four intertwined congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. In addition, the document specifies how TCP should begin transmission after a relatively long idle period, as well as discussing various acknowledgment generation methods. This document obsoletes RFC 2581. {[}STANDARDS-TRACK{]}},
 }
 @misc{rfc6582,
     series =    {Request for Comments},
@@ -46,7 +44,6 @@
     pagetotal = 16,
     year =      2012,
     month =     apr,
-    abstract =  {RFC 5681 documents the following four intertwined TCP congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. RFC 5681 explicitly allows certain modifications of these algorithms, including modifications that use the TCP Selective Acknowledgment (SACK) option (RFC 2883), and modifications that respond to "partial acknowledgments" (ACKs that cover new data, but not all the data outstanding when loss was detected) in the absence of SACK. This document describes a specific algorithm for responding to partial acknowledgments, referred to as "NewReno". This response to partial acknowledgments was first proposed by Janey Hoe. This document obsoletes RFC 3782. {[}STANDARDS-TRACK{]}},
 }
 @misc{rfc9438,
     series =    {Request for Comments},
@@ -60,21 +57,6 @@
     pagetotal = 28,
     year =      2023,
     month =     aug,
-    abstract =  {CUBIC is a standard TCP congestion control algorithm that uses a cubic function instead of a linear congestion window increase function to improve scalability and stability over fast and long-distance networks. CUBIC has been adopted as the default TCP congestion control algorithm by the Linux, Windows, and Apple stacks. This document updates the specification of CUBIC to include algorithmic improvements based on these implementations and recent academic work. Based on the extensive deployment experience with CUBIC, this document also moves the specification to the Standards Track and obsoletes RFC 8312. This document also updates RFC 5681, to allow for CUBIC's occasionally more aggressive sending behavior.},
-}
-@misc{rfc6582,
-    series =    {Request for Comments},
-    number =    6582,
-    howpublished =  {RFC 6582},
-    publisher = {RFC Editor},
-    doi =       {10.17487/RFC6582},
-    url =       {https://www.rfc-editor.org/info/rfc6582},
-    author =    {Andrei Gurtov and Tom Henderson and Sally Floyd and Yoshifumi Nishida},
-    title =     {{The NewReno Modification to TCP's Fast Recovery Algorithm}},
-    pagetotal = 16,
-    year =      2012,
-    month =     apr,
-    abstract =  {RFC 5681 documents the following four intertwined TCP congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. RFC 5681 explicitly allows certain modifications of these algorithms, including modifications that use the TCP Selective Acknowledgment (SACK) option (RFC 2883), and modifications that respond to "partial acknowledgments" (ACKs that cover new data, but not all the data outstanding when loss was detected) in the absence of SACK. This document describes a specific algorithm for responding to partial acknowledgments, referred to as "NewReno". This response to partial acknowledgments was first proposed by Janey Hoe. This document obsoletes RFC 3782. {[}STANDARDS-TRACK{]}},
 }
 @misc{bachl22,
 author = {Bachl, Maximilian},
@@ -115,3 +97,13 @@ doi = {10.48550/arXiv.2206.10561}
   keywords={Delays;Probability;Estimation;Internet;Throughput;Jitter;Linux;bufferbloat;Active Queue Management (AQM);Quality of Service (QoS);Explicit Congestion Notification (ECN)},
   doi={10.1109/HPSR.2013.6602305}}
 
+@INPROCEEDINGS{hass08,
+  author={Hassayoun, Sofiane and Ros, David},
+  booktitle={IEEE INFOCOM Workshops 2008}, 
+  title={Loss synchronization and router buffer sizing with high-speed versions of TCP}, 
+  year={2008},
+  volume={},
+  number={},
+  pages={1-6},
+  keywords={Telecommunication buffers;Telecommunication traffic;Traffic control;Proposals;Protocols;Bandwidth;Jacobian matrices},
+  doi={10.1109/INFOCOM.2008.4544632}}

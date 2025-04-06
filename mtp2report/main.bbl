@@ -79,7 +79,6 @@
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{This document defines TCP's four intertwined congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. In addition, the document specifies how TCP should begin transmission after a relatively long idle period, as well as discussing various acknowledgment generation methods. This document obsoletes RFC 2581. {[}STANDARDS-TRACK{]}}
       \field{howpublished}{RFC 5681}
       \field{month}{9}
       \field{number}{5681}
@@ -120,7 +119,6 @@
       \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{This document specifies the Transmission Control Protocol (TCP). TCP is an important transport-layer protocol in the Internet protocol stack, and it has continuously evolved over decades of use and growth of the Internet. Over this time, a number of changes have been made to TCP as it was specified in RFC 793, though these have only been documented in a piecemeal fashion. This document collects and brings those changes together with the protocol specification from RFC 793. This document obsoletes RFC 793, as well as RFCs 879, 2873, 6093, 6429, 6528, and 6691 that updated parts of RFC 793. It updates RFCs 1011 and 1122, and it should be considered as a replacement for the portions of those documents dealing with TCP requirements. It also updates RFC 5961 by adding a small clarification in reset handling while in the SYN-RECEIVED state. The TCP header control bits from RFC 793 have also been updated based on RFC 3168.}
       \field{howpublished}{RFC 9293}
       \field{month}{8}
       \field{number}{9293}
@@ -213,7 +211,6 @@
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{RFC 5681 documents the following four intertwined TCP congestion control algorithms: slow start, congestion avoidance, fast retransmit, and fast recovery. RFC 5681 explicitly allows certain modifications of these algorithms, including modifications that use the TCP Selective Acknowledgment (SACK) option (RFC 2883), and modifications that respond to "partial acknowledgments" (ACKs that cover new data, but not all the data outstanding when loss was detected) in the absence of SACK. This document describes a specific algorithm for responding to partial acknowledgments, referred to as "NewReno". This response to partial acknowledgments was first proposed by Janey Hoe. This document obsoletes RFC 3782. {[}STANDARDS-TRACK{]}}
       \field{howpublished}{RFC 6582}
       \field{month}{4}
       \field{number}{6582}
@@ -376,7 +373,6 @@
       \field{sortinithash}{1965c258adceecf23ce3d67b05113442}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{abstract}{CUBIC is a standard TCP congestion control algorithm that uses a cubic function instead of a linear congestion window increase function to improve scalability and stability over fast and long-distance networks. CUBIC has been adopted as the default TCP congestion control algorithm by the Linux, Windows, and Apple stacks. This document updates the specification of CUBIC to include algorithmic improvements based on these implementations and recent academic work. Based on the extensive deployment experience with CUBIC, this document also moves the specification to the Standards Track and obsoletes RFC 8312. This document also updates RFC 5681, to allow for CUBIC's occasionally more aggressive sending behavior.}
       \field{howpublished}{RFC 9438}
       \field{month}{8}
       \field{number}{9438}
