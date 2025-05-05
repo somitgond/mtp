@@ -195,29 +195,25 @@ def mean_goodput(folder_path, debug=0):
 
 
 def compute_link_utilization(
-    folder_path, packet_size_bytes=1454, link_bandwidth_mbps=100.0
+    folder_path, delta_time = 0.1, packet_size_bytes=1454, link_bandwidth_mbps=100.0
 ):
     file_path = folder_path + "bottleneckTx-dumbbell.txt"
-    times = []
     packets = []
 
     # Read the cumulative packet log
     with open(file_path, "r") as f:
         for line in f:
             t, pkt = line.strip().split()
-            times.append(float(t))
             packets.append(int(pkt))
 
-    times = np.array(times)
     packets = np.array(packets)
 
     # Get packets per second
-    delta_time = np.diff(times)
     delta_packets = np.diff(packets)
+    delta_packets = delta_packets[delta_packets != 0]
 
     # Packets per second
     pps = delta_packets / delta_time
-    pps = pps*10
 
     # Convert to Mbps: (pps × packet_size_bytes × 8) / 1024*1024
     throughput_mbps = pps * packet_size_bytes * 8 / (1024 * 1024)
