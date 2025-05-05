@@ -217,6 +217,7 @@ def compute_link_utilization(
 
     # Packets per second
     pps = delta_packets / delta_time
+    pps = pps*10
 
     # Convert to Mbps: (pps × packet_size_bytes × 8) / 1024*1024
     throughput_mbps = pps * packet_size_bytes * 8 / (1024 * 1024)
