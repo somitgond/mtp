@@ -14,6 +14,7 @@ import random
 import subprocess
 import time
 import xml.etree.ElementTree as ET
+from collections import defaultdict
 from pathlib import Path
 from re import sub
 
@@ -127,7 +128,8 @@ def packet_loss(folder_path, debug=0):
 
     pkt_loss = lost_pkts / pkts_sent
 
-    return np.mean(pkt_loss) * 100, np.std(pkt_loss)*100
+    return np.mean(pkt_loss) * 100, np.std(pkt_loss) * 100
+
 
 def mean_goodput(folder_path, debug=0):
     tree = ET.parse(f"{folder_path}/dumbbell-flowmonitor.xml")
@@ -156,21 +158,29 @@ def mean_goodput(folder_path, debug=0):
 
         src_ip = flow_id_to_src_ip[flow_id]
         rx_bytes = int(flow["rxBytes"])
-        time_first_tx = float(flow["timeFirstTxPacket"])
-        time_last_rx = float(flow["timeLastTxPacket"])
-        duration = time_last_rx - time_first_tx
 
+        time_first_tx_ns = float(
+            flow["timeFirstTxPacket"].replace("+", "").replace("ns", "")
+        )  # First transmission time (ns)
+        time_last_tx_ns = float(
+            flow["timeLastTxPacket"].replace("+", "").replace("ns", "")
+        )  # Last transmission time (ns)
+
+        # Calculate total time in seconds
+        duration = (time_last_tx_ns - time_first_tx_ns) / 1e9
         if duration > 0:
             sender_bits[src_ip] += rx_bytes * 8.0  # bits
             sender_times[src_ip] += duration
             if debug:
-                print(f"Flow {flow_id} from {src_ip}: duration = {duration:.3f}s, rxBytes = {rx_bytes}")
+                print(
+                    f"Flow {flow_id} from {src_ip}: duration = {duration:.3f}s, rxBytes = {rx_bytes}"
+                )
 
     # Compute goodput in Mbps for each sender
     goodputs_mbps = []
     for sender in sender_bits:
         goodput = sender_bits[sender] / sender_times[sender]  # bits/sec
-        goodputs_mbps.append(goodput / (1024*1024))  # Convert to Mbps
+        goodputs_mbps.append(goodput / (1024 * 1024))  # Convert to Mbps
         if debug:
             print(f"Sender {sender} - Goodput: {goodput / 1e6:.2f} Mbps")
 
@@ -184,13 +194,15 @@ def mean_goodput(folder_path, debug=0):
     return mean_gp, std_gp
 
 
-def compute_link_utilization(folder_path, packet_size_bytes=1454, link_bandwidth_mbps=100.0):
+def compute_link_utilization(
+    folder_path, packet_size_bytes=1454, link_bandwidth_mbps=100.0
+):
     file_path = folder_path + "bottleneckTx-dumbbell.txt"
     times = []
     packets = []
 
     # Read the cumulative packet log
-    with open(file_path, 'r') as f:
+    with open(file_path, "r") as f:
         for line in f:
             t, pkt = line.strip().split()
             times.append(float(t))
@@ -207,7 +219,7 @@ def compute_link_utilization(folder_path, packet_size_bytes=1454, link_bandwidth
     pps = delta_packets / delta_time
 
     # Convert to Mbps: (pps × packet_size_bytes × 8) / 1024*1024
-    throughput_mbps = pps * packet_size_bytes * 8 / (1024*1024)
+    throughput_mbps = pps * packet_size_bytes * 8 / (1024 * 1024)
 
     # Utilization = throughput / link bandwidth
     utilization_percent = (throughput_mbps / link_bandwidth_mbps) * 100
@@ -317,7 +329,7 @@ if __name__ == "__main__":
         "Jitter in RTT(ms)",
         "Queuing Delay(ms)",
         "std queuing delay",
-         "Packet loss %",
+        "Packet loss %",
         "std pkt loss",
     ]
 
@@ -428,7 +440,7 @@ if __name__ == "__main__":
                 queue_delay,
                 std_queue_delay,
                 pkt_loss,
-                std_pkt_loss
+                std_pkt_loss,
             ]
 
             with open(data_filename, "a", newline="") as csvfile:
