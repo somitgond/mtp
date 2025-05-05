@@ -121,12 +121,102 @@ def packet_loss(folder_path, debug=0):
         pkts_sent.append(int(flow["txPackets"]))
         if debug == 1:
             print(f"Packet Lost: {lost_pkts[-1]} total packets: {pkts_sent[-1]}")
+
     lost_pkts = np.array(lost_pkts)
     pkts_sent = np.array(pkts_sent)
 
     pkt_loss = lost_pkts / pkts_sent
 
-    return pkt_loss.mean() * 100, pkt_loss.std()
+    return np.mean(pkt_loss) * 100, np.std(pkt_loss)*100
+
+def mean_goodput(folder_path, debug=0):
+    tree = ET.parse(f"{folder_path}/dumbbell-flowmonitor.xml")
+    root = tree.getroot()
+    flowstates = root[0]  # FlowStats
+    classifier = root[1]  # FlowClassifiers
+
+    # Parse flow data
+    flow_data = [flow.attrib for flow in flowstates]
+
+    # Map flowId to source IP
+    flow_id_to_src_ip = {}
+    for classifier_entry in classifier:
+        attrs = classifier_entry.attrib
+        flow_id_to_src_ip[attrs["flowId"]] = attrs["sourceAddress"]
+
+    # Dictionary to store total bits and durations per sender IP
+    sender_bits = defaultdict(float)
+    sender_times = defaultdict(float)
+
+    for flow in flow_data:
+        flow_id = flow["flowId"]
+
+        if flow_id_to_src_ip[flow_id] not in SOURCE_IPS:
+            continue
+
+        src_ip = flow_id_to_src_ip[flow_id]
+        rx_bytes = int(flow["rxBytes"])
+        time_first_tx = float(flow["timeFirstTxPacket"])
+        time_last_rx = float(flow["timeLastTxPacket"])
+        duration = time_last_rx - time_first_tx
+
+        if duration > 0:
+            sender_bits[src_ip] += rx_bytes * 8.0  # bits
+            sender_times[src_ip] += duration
+            if debug:
+                print(f"Flow {flow_id} from {src_ip}: duration = {duration:.3f}s, rxBytes = {rx_bytes}")
+
+    # Compute goodput in Mbps for each sender
+    goodputs_mbps = []
+    for sender in sender_bits:
+        goodput = sender_bits[sender] / sender_times[sender]  # bits/sec
+        goodputs_mbps.append(goodput / (1024*1024))  # Convert to Mbps
+        if debug:
+            print(f"Sender {sender} - Goodput: {goodput / 1e6:.2f} Mbps")
+
+    # Mean and standard deviation
+    if goodputs_mbps:
+        mean_gp = np.mean(goodputs_mbps)
+        std_gp = np.std(goodputs_mbps)
+    else:
+        mean_gp = std_gp = 0.0
+
+    return mean_gp, std_gp
+
+
+def compute_link_utilization(folder_path, packet_size_bytes=1454, link_bandwidth_mbps=100.0):
+    file_path = folder_path + "bottleneckTx-dumbbell.txt"
+    times = []
+    packets = []
+
+    # Read the cumulative packet log
+    with open(file_path, 'r') as f:
+        for line in f:
+            t, pkt = line.strip().split()
+            times.append(float(t))
+            packets.append(int(pkt))
+
+    times = np.array(times)
+    packets = np.array(packets)
+
+    # Get packets per second
+    delta_time = np.diff(times)
+    delta_packets = np.diff(packets)
+
+    # Packets per second
+    pps = delta_packets / delta_time
+
+    # Convert to Mbps: (pps × packet_size_bytes × 8) / 1024*1024
+    throughput_mbps = pps * packet_size_bytes * 8 / (1024*1024)
+
+    # Utilization = throughput / link bandwidth
+    utilization_percent = (throughput_mbps / link_bandwidth_mbps) * 100
+
+    # Mean and std
+    mean_util = np.mean(utilization_percent)
+    std_util = np.std(utilization_percent)
+
+    return mean_util, std_util
 
 
 def global_sync_value(folder_path, debug=0):
@@ -216,6 +306,10 @@ if __name__ == "__main__":
         "Global Sync Value",
         "Average Throughput(Mbps)",
         "std avg throughput",
+        "Average Goodput(Mbps)",
+        "std goodput",
+        "Link Utilization",
+        "std link utilization",
         "Flow Completion Time(s)",
         "std flow comp time(s)",
         "Averate Data Sent(Mb)",
@@ -284,6 +378,7 @@ if __name__ == "__main__":
     ]
 
     for fn, start_file_index in file_name_to_file_index:
+        print(f"Running for: {fn}")
         data_filename = f"{fn}.csv"
         with open(data_filename, "w", newline="") as csvfile:
             writer = csv.writer(csvfile)
@@ -291,7 +386,7 @@ if __name__ == "__main__":
 
         num = 0
         for i in range(start_file_index, start_file_index + 20):
-            print(f"Iteration: {num}")
+            print(f"\tIteration: {num}")
 
             file_name = f"{src_path}/result-clientServerRouter-{i}"
 
@@ -299,7 +394,7 @@ if __name__ == "__main__":
 
             # run the command
             subprocess.run(cmd_to_run, shell=True, stdout=subprocess.DEVNULL)
-            print(f"Extracted {file_name}.gzip")
+            print(f"\tExtracted {file_name}.gzip")
             time.sleep(2)
 
             folder_path = file_name + "/"
@@ -311,6 +406,9 @@ if __name__ == "__main__":
             )
             pkt_loss, std_pkt_loss = packet_loss(folder_path)
 
+            goodput_avg, goodput_std = mean_goodput(folder_path)
+            lu_avg, lu_std = compute_link_utilization(folder_path)
+
             data_to_write = [
                 num,
                 random_seeds[i - start_file_index],
@@ -318,6 +416,10 @@ if __name__ == "__main__":
                 global_sync_value(folder_path),
                 throughput_avg,
                 std_throughput,
+                goodput_avg,
+                goodput_std,
+                lu_avg,
+                lu_std,
                 fct_avg,
                 std_fct,
                 data_avg,
@@ -325,6 +427,8 @@ if __name__ == "__main__":
                 jitter,
                 queue_delay,
                 std_queue_delay,
+                pkt_loss,
+                std_pkt_loss
             ]
 
             with open(data_filename, "a", newline="") as csvfile:
