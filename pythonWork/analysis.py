@@ -195,7 +195,7 @@ def mean_goodput(folder_path, debug=0):
 
 
 def compute_link_utilization(
-    folder_path, delta_time = 0.1, packet_size_bytes=1454, link_bandwidth_mbps=100.0
+    folder_path, delta_time=0.1, packet_size_bytes=1454, link_bandwidth_mbps=100.0
 ):
     file_path = folder_path + "bottleneckTx-dumbbell.txt"
     packets = []
