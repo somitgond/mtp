@@ -49,7 +49,7 @@ Now, how to calculate the parameter \( q_{th} \) effectively.  \\
 To calculate of $ q_{th} $ we require values of $ \beta $ and $ w^* $. \\
 So, the objective of our project is to: 
 \begin{enumerate}
-    \item Simulate sample topologies in ns-3 and Generate Data 
+    \item Simulate sample topologies in ns-3 and generate data
     \item Calculate \( \beta \) value and $ w^* $ from generated data, then calculating \( q_{th} \) 
     \item Implement this whole process of calculating $ q_{th} $ then setting it as threshold, in ns-3 
 \end{enumerate}
@@ -72,6 +72,7 @@ The methodology we took to achieve the desired objective:
     \item Understanding data: At this phase, we basically analyzed the generated data what different inferences we can generate from it.
     \item Finding Optimal Parameters: We propose using data driven approach to calculate \( \beta, \alpha \) and k values, and from that we can calculate value of \( q_{th} \). 
     \item Updating the metric: In this phase we will be implementing our approach in ns-3. Comparing our results with with general congestion scenario and check if our approach fairs better or worse.
+    \item Benchmarking: We compare our implementation results with existing models.
 \end{enumerate}
 
 \clearpage
@@ -97,14 +98,71 @@ Some of the result is discussed below:\\
 1. This graph (\ref{fig:myfig3}) shows how cwnd size varies with time for a single node. You can see in this graph how additive increase and multiplicative decrease (AIMD) works in congestion avoidance phase of TCP. Size of cwnd either increases linearly or decreases multiplicatively with each RTT in congestion avoidance phase.\\ % graph 
 2. This graph (\ref{fig:myfig4}) shows cwnd size vs time for all 60 nodes. This graph shows how global synchronization leads to bandwidth underutilization. Global synchronization means either all nodes send traffic simultaneously or back off simultaneously. \\ % graph
 3. This graph (\ref{fig:myfig5}) show average cwnd ($ w^* $) vs time. $ w^* $ is average of $ w $ for all nodes with time. \\ %graph
-4. This graph shows how we have found synchronization between two flows.
+4. This graph (\ref{fig:myfig6}) shows how we have found synchronization between two flows. Due to results being inconclusive for when AQM is on and when AQM is off we didn't go further with it. \\ 
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/2025-05-06-10-53-43.png}
+  \caption{Loss synchronization between pair of flows}
+  \label{fig:myfig6}
+\end{figure}
+5 . This graph (\ref{fig:myfig7}) shows our approach to find trigger condition. We see queue size vs time for queue size 2084 and 30. In queue size 2084 case we see there is some pattern. When we calculate its autocorrelation (\ref{fig:myfig8}) we see that for some overlap autocorrelation is high. Then we find number of zero crossings from it. When number of zero crossings is less than a threshold we trigger AQM. \\ 
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/2025-05-06-11-06-53.png}
+  \caption{Queue Size vs Time}
+  \label{fig:myfig7}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/2025-05-06-11-07-37.png}
+  \caption{Autocorrelation of Queue Size}
+  \label{fig:myfig8}
+\end{figure}
+
+6. Some results after simulations are depicted in figure \ref{fig:myfig9}, \ref{fig:myfig10}, \ref{fig:myfig11}, \ref{fig:myfig12}. The size of data to sent between clients and servers was 100 MB. \\ 
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/2025-05-06-11-09-16.png}
+  \caption{Average Throughput vs RTT}
+  \label{fig:myfig9}
+\end{figure}
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/Queueing_delay_vs_rtt.png}
+  \caption{Queueing Delay vs RTT}
+  \label{fig:myfig10}
+\end{figure}
+
+ 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/2025-05-06-11-10-58.png}
+  \caption{Flow Completion Time vs RTT}
+  \label{fig:myfig11}
+\end{figure}
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/2025-05-06-11-11-40.png}
+  \caption{Packet loss vs RTT}
+  \label{fig:myfig12}
+\end{figure}
+
+
 
 \clearpage
 \section{Summary and Future plan of work}
-In our project we aim to propose a solution to widely encountered situation in today's internet connected world, Network Congestion. Congestion wastes important resources time, computing power etc. If not handled properly it can lead to collapse of whole internet infrastructure. It occurs in routers, when incoming traffic is greater then bandwidth of outgoing link. Routers have finite buffer that they use to continuously send data thus utilizing full bandwidth. Most of recent work is focused on making end points more intelligent and handling congestion mainly through them. Active Queue Management (AQM) serves as a way for router to control congestion as well as notify end points that a congestion has occurred or it is likely to occur if they don't lower their sending rates. Random Early Detection randomly starts to drop packets as queue get full. While Threshold based queuing policy starts to drop packets when queue size crosses a certain threshold. In our project we aim to modify threshold based queuing policy such that it ensures stability as well as greater throughput thus more utilization of bandwidth. We will be using data driven approach to learn queue threshold parameter.\\
-Future work includes refining our approach more as well as fixing inconsistencies in the data generated. Using different approaches to calculate \( \alpha, \beta \) and k parameter. Implementing this new AQM policy in ns-3 and comparing its result with current widely used methods.\\
-
-%This is how you cite a paper: Golve~\cite{glove:2014}.
+In our project we aim to propose a solution to widely encountered situation in today's internet connected world, Network Congestion. Congestion wastes important resources such as time, computing power etc. If not handled properly it can lead to collapse of whole internet infrastructure. It occurs in routers, when incoming traffic is greater then bandwidth of outgoing link. Routers have finite buffer that they use to continuously send data thus utilizing full bandwidth. Most of recent work is focused on making end points more intelligent and handling congestion mainly through them. Active Queue Management (AQM) serves as a way for router to control congestion as well as notify end points that a congestion has occurred or it is likely to occur if they don't lower their sending rates. Random Early Detection randomly starts to drop packets as queue get full. While Threshold based queuing policy starts to drop packets when queue size crosses a certain threshold. In our project we aim to modify threshold based queuing policy such that it ensures stability as well as greater throughput thus more utilization of bandwidth.\\
+In the results we see that while our AQM did not performed better than network without AQM, its performance was not much worse. So, while utilising minimal resource performance decrease was close to 1\%. \\ 
+Future work includes refining our approach as well as finding new ways to accomplish the project's objective. \\
 
 \clearpage
 
