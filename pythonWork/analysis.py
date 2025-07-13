@@ -374,7 +374,7 @@ if __name__ == "__main__":
         240,
         245,
     ]
-    src_path = "results-3"
+    src_path = "results"
     file_name_to_file_index = [
         ["a_results_LN_aqm_zc", 70],
         ["a_results_LN_naqm_zc", 90],
@@ -384,6 +384,9 @@ if __name__ == "__main__":
         ["a_results_NR_naqm_zc", 210],
         ["a_results_NR_aqm_zc_100MB", 230],
         ["a_results_NR_naqm_zc_100MB", 250],
+        ["a_results_NR_codel_zc_TM", 270],
+        ["a_results_NR_codel_zc", 290],
+        ["a_results_NR_aqm_zc_TM", 310],
     ]
 
     for fn, start_file_index in file_name_to_file_index:
