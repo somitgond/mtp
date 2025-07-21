@@ -48,7 +48,7 @@ def avg_throughput_calc(folder_path, fct=False, debug=0):
 def calculate_throughput(flow_data, flows_ip, fct=False, debug=0):
     throughput_data = []
     fct_data = []
-    trasmitted_data = []
+    transmitted_data = []
 
     for flow in flow_data:
         flow_id = flow["flowId"]
@@ -87,17 +87,17 @@ def calculate_throughput(flow_data, flows_ip, fct=False, debug=0):
 
         throughput_data.append(throughput_mbps)
         fct_data.append(total_time_sec_fct)
-        trasmitted_data.append(data_sent)
+        transmitted_data.append(data_sent)
 
     throughput_data = np.array(throughput_data)
     fct_data = np.array(fct_data)
-    trasmitted_data = np.array(trasmitted_data)
+    transmitted_data = np.array(transmitted_data)
     return (
         np.mean(throughput_data),
         np.std(throughput_data),
         np.mean(fct_data),
         np.std(fct_data),
-        np.mean(trasmitted_data),
+        np.mean(transmitted_data),
     )
 
 
@@ -168,9 +168,12 @@ def mean_goodput(folder_path, debug=0):
         time_last_tx_ns = float(
             flow["timeLastTxPacket"].replace("+", "").replace("ns", "")
         )  # Last transmission time (ns)
+        time_last_rx_ns = float(
+            flow["timeLastRxPacket"].replace("+", "").replace("ns", "")
+        )  # Last Recieved time (ns)
 
         # Calculate total time in seconds
-        duration = (time_last_tx_ns - time_first_tx_ns) / 1e9
+        duration = (time_last_rx_ns - time_first_tx_ns) / 1e9
         if duration > 0:
             sender_bits[src_ip] += rx_bytes * 8.0  # bits
             sender_times[src_ip] += duration
@@ -377,19 +380,20 @@ if __name__ == "__main__":
         240,
         245,
     ]
-    src_path = "results"
+    src_path = "results-1"
     file_name_to_file_index = [
-        ["a_results_LN_aqm_zc", 70],
-        ["a_results_LN_naqm_zc", 90],
-        ["a_results_LN_aqm_zc_100MB", 150],
-        ["a_results_LN_naqm_zc_100MB", 170],
-        ["a_results_NR_aqm_zc", 190],
-        ["a_results_NR_naqm_zc", 210],
-        ["a_results_NR_aqm_zc_100MB", 230],
-        ["a_results_NR_naqm_zc_100MB", 250],
-        ["a_results_NR_codel_zc_TM", 270],
-        ["a_results_NR_codel_zc", 290],
-        ["a_results_NR_aqm_zc_TM", 310],
+        ["a_results_LN_aqm_zc", 0],
+        ["a_results_LN_codel_zc", 20],
+        # ["a_results_LN_naqm_zc", 90],
+        # ["a_results_LN_aqm_zc_100MB", 150],
+        # ["a_results_LN_naqm_zc_100MB", 170],
+        # ["a_results_NR_aqm_zc", 190],
+        # ["a_results_NR_naqm_zc", 210],
+        # ["a_results_NR_aqm_zc_100MB", 230],
+        # ["a_results_NR_naqm_zc_100MB", 250],
+        # ["a_results_LN_codel_zc_TM", 350],
+        # ["a_results_LN_aqm_zc_TM", 310],
+        # ["a_results_LN_codel_zc_100MB", 330],
     ]
 
     for fn, start_file_index in file_name_to_file_index:
