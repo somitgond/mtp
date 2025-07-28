@@ -2,10 +2,7 @@
 # date: 02/04/2025
 
 """
-This file is used to simulate ns3 script and find global sync threshold
-Flow:
-run simulation T times
-each time calculate avg throughput and average global synchronization
+Calculate metric on given data 
 """
 
 import csv
@@ -23,17 +20,19 @@ import numpy as np
 SOURCE_IPS = []
 
 
-def avg_throughput_calc(folder_path, fct=False, debug=0):
-    # os.chdir(folder_path)
+def avg_throughput_calc(folder_path, debug=0):
     filename = folder_path + "dumbbell-flowmonitor.xml"
     # throughput calculation
     tree = ET.parse(filename)
     root = tree.getroot()
     flowstats = root[0]
+
+    # flow data (metadata)
     attri = []
     for flows in flowstats:
         attri.append(flows.attrib)
 
+    # one-to-one mapping between client and destination
     flows_ip = {}
     for ips in root[1]:
         temp = ips.attrib
@@ -42,50 +41,49 @@ def avg_throughput_calc(folder_path, fct=False, debug=0):
             temp["destinationAddress"],
         ]
 
-    return calculate_throughput(attri, flows_ip, fct, debug)
+    return calculate_throughput(attri, flows_ip, debug)
 
-
-def calculate_throughput(flow_data, flows_ip, fct=False, debug=0):
+def calculate_throughput(flow_data, flows_ip, debug=0):
     throughput_data = []
     fct_data = []
     transmitted_data = []
+    goodput_data = []
 
     for flow in flow_data:
         flow_id = flow["flowId"]
 
+        # traffic originate from source ip
         if flows_ip[flow_id][0] not in SOURCE_IPS:
             continue
 
-        tx_bytes = int(flow["txBytes"])  # Transmitted bytes
+        rx_bytes = int(flow["rxBytes"])  # Total received bytes on the flow end 
         time_first_tx_ns = float(
             flow["timeFirstTxPacket"].replace("+", "").replace("ns", "")
         )  # First transmission time (ns)
-        time_last_tx_ns = float(
-            flow["timeLastTxPacket"].replace("+", "").replace("ns", "")
-        )  # Last transmission time (ns)
-
         time_last_rx_ns = float(
             flow["timeLastRxPacket"].replace("+", "").replace("ns", "")
         )  # Last Recieved time (ns)
 
         # Calculate total time in seconds
-        total_time_sec = (time_last_tx_ns - time_first_tx_ns) / 1e9
-
         total_time_sec_fct = (time_last_rx_ns - time_first_tx_ns) / 1e9
 
         # Calculate throughput in Mbps
-        if(total_time_sec != 0):
-            throughput_bps = tx_bytes / total_time_sec
+        if(total_time_sec_fct != 0):
+            throughput_bps = rx_bytes / total_time_sec_fct
+            goodput_bps = (rx_bytes - (40 * int(flow["rxPackets"]))) / total_time_sec_fct
         else:
             throughput_bps = 0
-        throughput_mbps = (throughput_bps * 8) / (1024 * 1024)
+        throughput_mbps = (throughput_bps * 8) / (1e6)
+        goodput_mbps = (goodput_bps * 8)/ 1e6
 
-        data_sent = (tx_bytes * 8) / (1024 * 1024)
+        data_sent = (tx_bytes * 8) / (1e6)
 
         if debug == 1:
             print(f"Flow: {flow_id} throughput: {throughput_mbps}mbps")
+            print(f"Flow: {flow_id} Goodput: {goodput_mbps}mbps")
 
         throughput_data.append(throughput_mbps)
+        goodput_data.append(goodput_mbps)
         fct_data.append(total_time_sec_fct)
         transmitted_data.append(data_sent)
 
@@ -95,11 +93,12 @@ def calculate_throughput(flow_data, flows_ip, fct=False, debug=0):
     return (
         np.mean(throughput_data),
         np.std(throughput_data),
+        np.mean(goodput_data),
+        np.std(goodput_data),
         np.mean(fct_data),
         np.std(fct_data),
         np.mean(transmitted_data),
     )
-
 
 def packet_loss(folder_path, debug=0):
     tree = ET.parse(f"{folder_path}dumbbell-flowmonitor.xml")
@@ -133,73 +132,6 @@ def packet_loss(folder_path, debug=0):
 
     return np.mean(pkt_loss) * 100, np.std(pkt_loss) * 100
 
-
-def mean_goodput(folder_path, debug=0):
-    tree = ET.parse(f"{folder_path}/dumbbell-flowmonitor.xml")
-    root = tree.getroot()
-    flowstates = root[0]  # FlowStats
-    classifier = root[1]  # FlowClassifiers
-
-    # Parse flow data
-    flow_data = [flow.attrib for flow in flowstates]
-
-    # Map flowId to source IP
-    flow_id_to_src_ip = {}
-    for classifier_entry in classifier:
-        attrs = classifier_entry.attrib
-        flow_id_to_src_ip[attrs["flowId"]] = attrs["sourceAddress"]
-
-    # Dictionary to store total bits and durations per sender IP
-    sender_bits = defaultdict(float)
-    sender_times = defaultdict(float)
-
-    for flow in flow_data:
-        flow_id = flow["flowId"]
-
-        if flow_id_to_src_ip[flow_id] not in SOURCE_IPS:
-            continue
-
-        src_ip = flow_id_to_src_ip[flow_id]
-        rx_bytes = int(flow["rxBytes"])
-
-        time_first_tx_ns = float(
-            flow["timeFirstTxPacket"].replace("+", "").replace("ns", "")
-        )  # First transmission time (ns)
-        time_last_tx_ns = float(
-            flow["timeLastTxPacket"].replace("+", "").replace("ns", "")
-        )  # Last transmission time (ns)
-        time_last_rx_ns = float(
-            flow["timeLastRxPacket"].replace("+", "").replace("ns", "")
-        )  # Last Recieved time (ns)
-
-        # Calculate total time in seconds
-        duration = (time_last_rx_ns - time_first_tx_ns) / 1e9
-        if duration > 0:
-            sender_bits[src_ip] += rx_bytes * 8.0  # bits
-            sender_times[src_ip] += duration
-            if debug:
-                print(
-                    f"Flow {flow_id} from {src_ip}: duration = {duration:.3f}s, rxBytes = {rx_bytes}"
-                )
-
-    # Compute goodput in Mbps for each sender
-    goodputs_mbps = []
-    for sender in sender_bits:
-        goodput = sender_bits[sender] / sender_times[sender]  # bits/sec
-        goodputs_mbps.append(goodput / (1024 * 1024))  # Convert to Mbps
-        if debug:
-            print(f"Sender {sender} - Goodput: {goodput / 1e6:.2f} Mbps")
-
-    # Mean and standard deviation
-    if goodputs_mbps:
-        mean_gp = np.mean(goodputs_mbps)
-        std_gp = np.std(goodputs_mbps)
-    else:
-        mean_gp = std_gp = 0.0
-
-    return mean_gp, std_gp
-
-
 def compute_link_utilization(
     folder_path, delta_time=0.1, packet_size_bytes=1454, link_bandwidth_mbps=100.0
 ):
@@ -221,7 +153,6 @@ def compute_link_utilization(
     # Packets per second
     pps = delta_packets / delta_time
 
-    # Convert to Mbps: (pps × packet_size_bytes × 8) / 1024*1024
     throughput_mbps = pps * packet_size_bytes * 8 / (1024 * 1024)
 
     # Utilization = throughput / link bandwidth
@@ -232,49 +163,6 @@ def compute_link_utilization(
     std_util = np.std(utilization_percent)
 
     return mean_util, std_util
-
-
-def global_sync_value(folder_path, debug=0):
-    # define parameters
-    window_size = 25  # 5 second window
-
-    # synchrony calculation
-    data = []
-    for f in os.listdir(folder_path):
-        if f.endswith(".cwnd"):
-            if debug == 1:
-                print(f"Reading file: {folder_path+f}")
-            d = np.genfromtxt(folder_path + f, delimiter=" ").reshape(-1, 2)
-            data.append(d[:, 1])
-
-    ## convert array to numpy
-    data = np.array(data)
-
-    data_loss = np.zeros(data.shape)
-
-    ## convert it into loss events
-    for i in range(len(data)):
-        for j in range(1, len(data[i])):
-            if data[i][j - 1] > data[i][j]:
-                data_loss[i][j] = 1
-
-    ## global sync
-    sync_rate = []
-    for k in range(len(data_loss[0])):
-        nij = 0
-        low = max(0, k - window_size)
-        high = min(k + window_size + 1, len(data_loss[0]))
-        for i in range(len(data_loss)):
-            for j in range(low, high):
-                if data_loss[i][j] == 1:
-                    nij += 1
-                    break
-        sync_rate.append(nij / len(data_loss))
-    if debug == 1:
-        print(sync_rate)
-    sync_rate = np.array(sync_rate)
-    return np.mean(sync_rate)
-
 
 # finding effective delay
 def effective_delay(folder_path, debug=0):
@@ -318,7 +206,6 @@ if __name__ == "__main__":
         "Simulation_number",
         "Random Seed",
         "RTT",
-        "Global Sync Value",
         "Average Throughput(Mbps)",
         "std avg throughput",
         "Average Goodput(Mbps)",
@@ -404,6 +291,7 @@ if __name__ == "__main__":
             writer.writerow(fields)
 
         num = 0
+        # change step size based on simulation
         for i in range(start_file_index, start_file_index + 20):
             print(f"\tIteration: {num}")
 
@@ -418,21 +306,18 @@ if __name__ == "__main__":
 
             folder_path = file_name + "/"
 
-            # write data in output file
             eff_rtt, jitter, queue_delay, std_queue_delay = effective_delay(folder_path)
-            throughput_avg, std_throughput, fct_avg, std_fct, data_avg = (
+            throughput_avg, std_throughput, goodput_avg, goodput_std, fct_avg, std_fct, data_avg = (
                 avg_throughput_calc(folder_path)
             )
-            pkt_loss, std_pkt_loss = packet_loss(folder_path)
 
-            goodput_avg, goodput_std = mean_goodput(folder_path)
+            pkt_loss, std_pkt_loss = packet_loss(folder_path)
             lu_avg, lu_std = compute_link_utilization(folder_path)
 
             data_to_write = [
                 num,
                 random_seeds[i - start_file_index],
                 rtts[i - start_file_index],
-                global_sync_value(folder_path),
                 throughput_avg,
                 std_throughput,
                 goodput_avg,
@@ -450,6 +335,7 @@ if __name__ == "__main__":
                 std_pkt_loss,
             ]
 
+            # write data in output file
             with open(data_filename, "a", newline="") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(data_to_write)
