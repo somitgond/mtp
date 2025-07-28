@@ -380,10 +380,10 @@ if __name__ == "__main__":
         240,
         245,
     ]
-    src_path = "results-1"
+    src_path = "results"
     file_name_to_file_index = [
-        ["a_results_LN_aqm_zc", 0],
-        ["a_results_LN_codel_zc", 20],
+        ["a_results_LN_aqm_zc", 40],
+        ["a_results_LN_codel_zc", 60],
         # ["a_results_LN_naqm_zc", 90],
         # ["a_results_LN_aqm_zc_100MB", 150],
         # ["a_results_LN_naqm_zc_100MB", 170],
