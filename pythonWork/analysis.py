@@ -76,7 +76,7 @@ def calculate_throughput(flow_data, flows_ip, debug=0):
         throughput_mbps = (throughput_bps * 8) / (1e6)
         goodput_mbps = (goodput_bps * 8)/ 1e6
 
-        data_sent = (tx_bytes * 8) / (1e6)
+        data_sent = (rx_bytes * 8) / (1e6)
 
         if debug == 1:
             print(f"Flow: {flow_id} throughput: {throughput_mbps}mbps")
@@ -269,8 +269,8 @@ if __name__ == "__main__":
     ]
     src_path = "results"
     file_name_to_file_index = [
-        ["a_results_LN_aqm_zc", 40],
-        ["a_results_LN_codel_zc", 60],
+        ["a_results_LN_aqm_zc", 80],
+        ["a_results_LN_codel_zc", 90],
         # ["a_results_LN_naqm_zc", 90],
         # ["a_results_LN_aqm_zc_100MB", 150],
         # ["a_results_LN_naqm_zc_100MB", 170],
@@ -292,7 +292,7 @@ if __name__ == "__main__":
 
         num = 0
         # change step size based on simulation
-        for i in range(start_file_index, start_file_index + 20):
+        for i in range(start_file_index, start_file_index + 10):
             print(f"\tIteration: {num}")
 
             file_name = f"{src_path}/result-clientServerRouter-{i}"
