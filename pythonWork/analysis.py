@@ -245,42 +245,18 @@ if __name__ == "__main__":
         42653,
         42653,
     ]
-    rtts = [
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        200,
-        205,
-        210,
-        215,
-        220,
-        225,
-        230,
-        235,
-        240,
-        245,
-    ]
+    rtts = list(np.arange(150,305,5))
     src_path = "results"
     file_name_to_file_index = [
-        ["a_results_LN_aqm_zc", 80],
-        ["a_results_LN_codel_zc", 90],
-        # ["a_results_LN_naqm_zc", 90],
-        # ["a_results_LN_aqm_zc_100MB", 150],
-        # ["a_results_LN_naqm_zc_100MB", 170],
-        # ["a_results_NR_aqm_zc", 190],
-        # ["a_results_NR_naqm_zc", 210],
-        # ["a_results_NR_aqm_zc_100MB", 230],
-        # ["a_results_NR_naqm_zc_100MB", 250],
-        # ["a_results_LN_codel_zc_TM", 350],
-        # ["a_results_LN_aqm_zc_TM", 310],
-        # ["a_results_LN_codel_zc_100MB", 330],
+        ["results_LN_aqm_zc_150_to_300", 160],
+        ["results_LN_codel_zc_150_to_300", 191],
+        ["results_LN_naqm_150_to_300", 222],
+        #["results_LN_aqm_zc_TM", 40],
+        #["results_LN_codel_zc_TM", 60],
+        #["results_LN_aqm_zc_100MB", 80],
+        #["results_LN_codel_zc_100MB", 100],
+        #["results_LN_aqm_zc_100MB_TM", 120],
+        #["results_LN_codel_zc_100MB_TM", 140],
     ]
 
     for fn, start_file_index in file_name_to_file_index:
@@ -291,9 +267,10 @@ if __name__ == "__main__":
             writer.writerow(fields)
 
         num = 0
+        step_size = 31;
         # change step size based on simulation
-        for i in range(start_file_index, start_file_index + 10):
-            print(f"\tIteration: {num}")
+        for i in range(start_file_index, start_file_index + step_size):
+            print(f"\tIteration: {num}, rtt={rtts[i-start_file_index]}")
 
             file_name = f"{src_path}/result-clientServerRouter-{i}"
 
@@ -316,7 +293,8 @@ if __name__ == "__main__":
 
             data_to_write = [
                 num,
-                random_seeds[i - start_file_index],
+                #random_seeds[i - start_file_index],
+                42653,
                 rtts[i - start_file_index],
                 throughput_avg,
                 std_throughput,
@@ -335,7 +313,7 @@ if __name__ == "__main__":
                 std_pkt_loss,
             ]
 
-            # write data in output file
+            # write data in output file 
             with open(data_filename, "a", newline="") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow(data_to_write)
