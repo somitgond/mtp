@@ -19,6 +19,9 @@ import numpy as np
 
 SOURCE_IPS = []
 
+# some default values
+bottleneckLinkBandwidth = 100 * 1000 * 1000 # in bits / second
+packetSize = 1454 * 8 # packet size in bytes (approx)
 
 def avg_throughput_calc(folder_path, debug=0):
     filename = folder_path + "dumbbell-flowmonitor.xml"
@@ -70,13 +73,16 @@ def calculate_throughput(flow_data, flows_ip, debug=0):
         # Calculate throughput in Mbps
         if(total_time_sec_fct != 0):
             throughput_bps = rx_bytes / total_time_sec_fct
+            # approximate 40 bytes of header
             goodput_bps = (rx_bytes - (40 * int(flow["rxPackets"]))) / total_time_sec_fct
         else:
             throughput_bps = 0
-        throughput_mbps = (throughput_bps * 8) / (1e6)
-        goodput_mbps = (goodput_bps * 8)/ 1e6
 
-        data_sent = (rx_bytes * 8) / (1e6)
+        # value of 1Mb = 1e6
+        throughput_mbps = (throughput_bps * 8) / 1e6 
+        goodput_mbps = (goodput_bps * 8) / 1e6
+
+        data_sent = (rx_bytes * 8) / 1e6
 
         if debug == 1:
             print(f"Flow: {flow_id} throughput: {throughput_mbps}mbps")
@@ -153,7 +159,7 @@ def compute_link_utilization(
     # Packets per second
     pps = delta_packets / delta_time
 
-    throughput_mbps = pps * packet_size_bytes * 8 / (1024 * 1024)
+    throughput_mbps = pps * packet_size_bytes * 8 / 1e6 # 1Mb = 1e6
 
     # Utilization = throughput / link bandwidth
     utilization_percent = (throughput_mbps / link_bandwidth_mbps) * 100
@@ -181,18 +187,15 @@ def effective_delay(folder_path, debug=0):
     # for 1 is added in queue buffer
     queue_data[:, 1] += 1
 
-    # average effective delay
-    avg_rtt = np.mean(rtt_data[:, 1])
-    avg_rtt += (np.mean(queue_data[:, 1]) * 8) / 10**5
-    avg_rtt += 2
-
-    # find jitter
-    combined = 2 + np.mean(rtt_data[:, 1]) + (queue_data[:, 1] * 8) / 10**5
+    tempQdata = (((queue_data[:, 1]) * packetSize * 8) / bottleneckLinkBandwidth)
+    # average effective delay and jitter
+    combined = 2 + np.mean(rtt_data[:, 1]) + tempQdata
     jitter_avg_rtt = np.var(combined)
+    avg_rtt = np.mean(combined)
 
     # queueing delay
-    queueing_delay = (np.mean(queue_data[:, 1]) * 8) / 10**5
-    std_queuing_delay = (np.std(queue_data[:, 1]) * 8) / 10**5
+    queueing_delay = np.mean(tempQdata)
+    std_queuing_delay = np.std(tempQdata)
 
     return avg_rtt, jitter_avg_rtt, queueing_delay, std_queuing_delay
 
@@ -246,11 +249,12 @@ if __name__ == "__main__":
         42653,
     ]
     rtts = list(np.arange(150,305,5))
-    src_path = "results"
+    src_path = "results-withRed"
     file_name_to_file_index = [
-        ["results_LN_aqm_zc_150_to_300", 160],
-        ["results_LN_codel_zc_150_to_300", 191],
-        ["results_LN_naqm_150_to_300", 222],
+        ["results_LN_aqm_zc_150_to_300", 0],
+        ["results_LN_codel_zc_150_to_300", 31],
+        ["results_LN_naqm_150_to_300", 62],
+        ["results_LN_red_150_to_300", 93],
         #["results_LN_aqm_zc_TM", 40],
         #["results_LN_codel_zc_TM", 60],
         #["results_LN_aqm_zc_100MB", 80],
