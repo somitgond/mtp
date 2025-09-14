@@ -21,7 +21,7 @@ SOURCE_IPS = []
 
 # some default values
 bottleneckLinkBandwidth = 100 * 1000 * 1000 # in bits / second
-packetSize = 1454 * 8 # packet size in bytes (approx)
+packetSize = 1400 * 8 # packet size in bytes (approx)
 
 def avg_throughput_calc(folder_path, debug=0):
     filename = folder_path + "dumbbell-flowmonitor.xml"
@@ -138,31 +138,29 @@ def packet_loss(folder_path, debug=0):
 
     return np.mean(pkt_loss) * 100, np.std(pkt_loss) * 100
 
-def compute_link_utilization(
-    folder_path, delta_time=0.1, packet_size_bytes=1454, link_bandwidth_mbps=100.0
-):
+def compute_link_utilization( folder_path, delta_time=0.1):
     file_path = folder_path + "bottleneckTx-dumbbell.txt"
-    packets = []
+    times, packets = [], []
 
-    # Read the cumulative packet log
+    # Read cumulative packets with timestamps
     with open(file_path, "r") as f:
         for line in f:
             t, pkt = line.strip().split()
+            times.append(float(t))
             packets.append(int(pkt))
-
+    times = np.array(times)
     packets = np.array(packets)
 
-    # Get packets per second
-    delta_packets = np.diff(packets)
-    delta_packets = delta_packets[delta_packets != 0]
+    # Differences
+    delta_t = np.diff(times)                 # interval durations
+    delta_packets = np.diff(packets)         # packets sent in each interval
 
-    # Packets per second
-    pps = delta_packets / delta_time
+    # Convert to throughput (bps)
+    bits_transmitted = delta_packets * 8
+    throughput_bps = bits_transmitted / delta_t
 
-    throughput_mbps = pps * packet_size_bytes * 8 / 1e6 # 1Mb = 1e6
-
-    # Utilization = throughput / link bandwidth
-    utilization_percent = (throughput_mbps / link_bandwidth_mbps) * 100
+    # Utilization = throughput / link_capacity
+    utilization_percent = (throughput_bps / bottleneckLinkBandwidth) * 100
 
     # Mean and std
     mean_util = np.mean(utilization_percent)
@@ -249,12 +247,12 @@ if __name__ == "__main__":
         42653,
     ]
     rtts = list(np.arange(150,305,5))
-    src_path = "results-withRed"
+    src_path = "results-withRed3"
     file_name_to_file_index = [
         ["results_LN_aqm_zc_150_to_300", 0],
         ["results_LN_codel_zc_150_to_300", 31],
         ["results_LN_naqm_150_to_300", 62],
-        ["results_LN_red_150_to_300", 93],
+        ["results_LN_red1_150_to_300", 93],
         #["results_LN_aqm_zc_TM", 40],
         #["results_LN_codel_zc_TM", 60],
         #["results_LN_aqm_zc_100MB", 80],
