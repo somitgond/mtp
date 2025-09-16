@@ -230,7 +230,7 @@ def effective_delay(folder_path, debug=0):
     queuing_delay = np.mean(tempQdata)
     std_queuing_delay = np.std(tempQdata)
     min_queuing_delay = max(queuing_delay - std_queuing_delay, 0)
-    max_queuing_delay = queuing_delay - std_queuing_delay
+    max_queuing_delay = queuing_delay + std_queuing_delay
 
     return (avg_rtt, jitter_avg_rtt, queuing_delay, std_queuing_delay, min_queuing_delay, max_queuing_delay)
 
