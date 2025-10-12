@@ -19,6 +19,10 @@ import numpy as np
 
 SOURCE_IPS = []
 
+# tcp flows
+TCP_FLOW_START = 10
+TCP_FLOW_END = 20
+
 # some default values
 bottleneckLinkBandwidth = 100 * 1000 * 1000 # in bits / second
 packetSize = 1400 * 8 # packet size in bytes (approx)
@@ -237,7 +241,7 @@ def effective_delay(folder_path, debug=0):
 
 if __name__ == "__main__":
     # added source ip address
-    for i in range(0, 60):
+    for i in range(TCP_FLOW_START, TCP_FLOW_END):
         SOURCE_IPS.append(f"10.1.{i}.1")
 
     random_seeds = [ 69713, 56629, 86799, 42653, 82842, 72958, 23256, 14590,
@@ -247,16 +251,10 @@ if __name__ == "__main__":
     rtts = list(np.arange(150,305,5))
     src_path = "results-withRed3"
     file_name_to_file_index = [
-        ["results_LN_aqm_zc_150_to_300", 0],
-        ["results_LN_codel_zc_150_to_300", 31],
-        ["results_LN_naqm_150_to_300", 62],
-        ["results_LN_red_150_to_300", 93],
-        #["results_LN_aqm_zc_TM", 40],
-        #["results_LN_codel_zc_TM", 60],
-        #["results_LN_aqm_zc_100MB", 80],
-        #["results_LN_codel_zc_100MB", 100],
-        #["results_LN_aqm_zc_100MB_TM", 120],
-        #["results_LN_codel_zc_100MB_TM", 140],
+        ["results_LN_aqm_zc_150_to_300_TM", 0],
+        ["results_LN_codel_zc_150_to_300_TM", 31],
+        ["results_LN_naqm_150_to_300_TM", 62],
+        ["results_LN_red_150_to_300_TM", 93],
     ]
 
     fields = [
@@ -269,6 +267,7 @@ if __name__ == "__main__":
         "effectiveDelay", "jitterRTT",
         "queuingDelay", "stdQueuingDelay", "minQueuingDelay", "maxQueuingDelay",
         "packetLoss", "stdPktLoss", "minPktLoss", "maxPktLoss", ]
+
     for fn, start_file_index in file_name_to_file_index:
         print(f"Running for: {fn}")
         data_filename = f"{fn}.csv"
